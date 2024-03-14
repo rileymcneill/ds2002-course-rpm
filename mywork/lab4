@@ -1,1 +1,13 @@
+#!/bin/bash
 
+clear 
+
+read -p "What is the file URL? " URL
+read -p "Which bucket? " BUCKET
+read -p "What is the file name? " FILE
+
+curl $URL > $FILE
+aws s3 cp $FILE s3://$BUCKET/
+aws s3 presign --expires-in 604800 s3://$BUCKET/$FILE
+
+Presigned URL: https://ds2002-mqt3uz.s3.us-east-1.amazonaws.com/willthiswork?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAZQ3DUIPWRTEZPMEX%2F20240314%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240314T005948Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Security-Token=FwoGZXIvYXdzEHEaDM1dB%2FbULK3wIZ83nCLEAdxiPYa8ffXo8c%2FR4Sv5HqjG8ZLAD8lgSfYzVMHNdSdFY1Gi%2BQks1lHgxsV%2B7b88OHZS7jKz8evZ8qc0M%2FYs2sEu%2BS1KfYEch5NbONqDGUahpkyPj71sCrOhjx4qlTxFrAOeTazIaeiGFSEVoVn4mCd%2FGqLGdG6%2FcGa9TJZhSgZttGrH0T6Nf96li5NYJDaUXQ1dJuFbR81Q3x%2FOr0%2FL8Bh37F4gK7IUmJ5NZYgv3n4WIj8QHkoE1I%2FwgcKstw4f%2BKJ0d0so8PfIrwYyLWnqQzafciqF8mLiR%2FcTVcxWv0drZbfVgM%2B7cSfJEo2GGzhSQnlX5ClvS1xULg%3D%3D&X-Amz-Signature=f271cd50ff896123d309d49d43ad43a75ccc2a4d3af3b9c4b33e9e35a8dd0eb6
