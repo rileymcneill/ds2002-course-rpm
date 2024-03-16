@@ -1,0 +1,28 @@
+#!/riley/bin/python3
+
+import boto3
+import requests
+import os
+
+s3 = boto3.client('s3', region_name="us-east-1")
+
+os.environ["bucket_name"] = "gifs"
+os.environ["expires"] = "604800"
+os.environ["url"] = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3V5emd0ZXdndXYxYWd5eXBseGx3a3pqNHR4andjdzBubDQ3bml5bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Sb7WSbjHFNIL6/giphy.gif"
+
+expires = input('When should it expire? ')
+url = input('What is the URl? ')
+
+bucket = 'ds2002-mqt3uz'
+
+s3.put_object(Bucket=bucket, Key=url, Body=url, ACL='public-read')
+
+presign = s3.generate_presigned_url(
+    'get_object',
+    Params={'Bucket': bucket, 'Key': url},
+    ExpiresIn=expires
+)
+
+print(presign)
+
+#presigned URL: https://ds2002-mqt3uz.s3.amazonaws.com/https%3A//media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3V5emd0ZXdndXYxYWd5eXBseGx3a3pqNHR4andjdzBubDQ3bml5bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Sb7WSbjHFNIL6/giphy.gif?AWSAccessKeyId=ASIAZQ3DUIPW4ZGTUC7S&Signature=DMq85GdkzIlPMtaoAj552LxefHM%3D&x-amz-security-token=FwoGZXIvYXdzEKP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDB%2BJqezKUGN%2FFVsSoSLEAcWYnCaGIRIisJ6YatdtGbBF8qHIIwtQoWljEKPPGCdMsX8bR6n5UEXbrcS7XmECr6EMfyjyKWmgnw4mmcIg88Pc6WRHo%2FwyVWNBsDzjyhfVUdjky%2FUSPoOrbyRNxFQ8vnBnpR2owrooiJDtn0%2BJWBPuTu8eB4z6HJSk0lMuVMR85ASAeBYirmtW%2FNJ6ROavvctbopyw27au577kMaXAFQY06siLCefi7Wafcmf%2BGhSyZx6SWBooxlSMJ%2BqqYKGoZavfLP8ozu3TrwYyLU%2FH4HfodfjCFaPbaRnB%2B7OM9cKVQ2Ik3P%2BsrUX%2B7li6QEVslpBowHqFwOZzpA%3D%3D&Expires=1711160852
